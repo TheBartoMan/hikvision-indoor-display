@@ -10,7 +10,7 @@
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/TheBartoMan/hikvision-indoor-display/issues",
   "requirements": [
-    "asyncssh==2.24.1"
+    "asyncssh>=2.24.0,<3"
   ],
   "version": "1.0.0"
 }
