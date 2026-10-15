@@ -1,0 +1,54 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect an indoor station",
+        "description": "Enter your station's address. SSH must already be enabled. No companion app or YAML package is needed.",
+        "data": {"host": "Station IP address or hostname", "port": "SSH port", "name": "Device name"}
+      },
+      "trust": {
+        "title": "Verify the station's SSH identity",
+        "description": "Station: {host}\nSSH fingerprint: {fingerprint}\nCompare this fingerprint against a trusted SSH connection to your station before confirming. No password has been sent yet. This key will be pinned; changed keys will be rejected.",
+        "data": {"verified": "I independently verified this fingerprint"}
+      },
+      "credentials": {
+        "title": "Authenticate and verify compatibility",
+        "description": "Supported: DS-KH6320-WTE1 running V2.2.108 build 250718, English 1024x600 display layout. This integration requires administrator/root Debug access and checks the running firmware binary. Other firmware is refused. Passwords are stored in HA configuration and may be included in backups.",
+        "data": {"password": "Station administrator password", "supported_device": "I administer this device and confirm the supported model, firmware and layout"}
+      },
+      "reauth_confirm": {
+        "title": "Update the station password",
+        "description": "The previously verified SSH key remains pinned. Enter the new station administrator password.",
+        "data": {"password": "Station administrator password"}
+      },
+      "reconfigure": {
+        "title": "Change connection settings",
+        "description": "The existing SSH key remains pinned. Leave password empty to retain the stored password. For a replacement device or deliberately changed host key, remove and add the integration again, verifying the new fingerprint.",
+        "data": {"host": "Station IP address or hostname", "port": "SSH port", "password": "New password (optional)"}
+      }
+    },
+    "error": {
+      "invalid_host": "Enter a valid station address and port.",
+      "cannot_connect": "Cannot connect or verify the pinned SSH key. Check SSH, address, port and network access.",
+      "invalid_auth": "Authentication or Debug unlock failed. Verify the station administrator password.",
+      "verify_host_key": "Verify the fingerprint before continuing.",
+      "unsupported_device": "This release supports only the stated model, firmware and display layout.",
+      "unsupported_firmware": "The running firmware binary does not match the verified compatibility profile. No display controls were sent.",
+      "discovery_failed": "Unable to read a complete supported camera catalog. Check that no separate diagnostic capture is running."
+    },
+    "abort": {
+      "already_configured": "This station is already configured.",
+      "reauth_successful": "Station credentials were updated.",
+      "reconfigure_successful": "Station connection settings were updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Polling and requested brightness",
+        "description": "Discovery also runs before every camera selection. Changing default brightness here does not immediately send a display command.",
+        "data": {"scan_interval": "Camera refresh interval (seconds)", "brightness": "Requested brightness (%)"}
+      }
+    }
+  }
+}
