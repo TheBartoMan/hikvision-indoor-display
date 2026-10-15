@@ -6,7 +6,10 @@
 - Public repository/maintainer: `TheBartoMan/hikvision-indoor-display`, `@TheBartoMan`.
 - Camera selection, display on/off and Home have been confirmed by an installation
   tester on the supported firmware profile; broader acceptance remains outstanding.
-- GitHub source publication, hosted validation and release creation are in progress.
+- Public source is available on GitHub. Consult the repository's
+  [Actions](https://github.com/TheBartoMan/hikvision-indoor-display/actions) and
+  [Releases](https://github.com/TheBartoMan/hikvision-indoor-display/releases)
+  for the current validation results and published downloads.
 - Local brand assets are supplied; default HACS catalog inclusion is not yet approved.
 - Local unit tests are not a substitute for live acceptance or hosted validation.
 
