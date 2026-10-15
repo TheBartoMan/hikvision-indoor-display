@@ -21,9 +21,10 @@ This is an independent community integration, not an official Hikvision product.
   HA/CPU combinations still need deployment verification. Slower CPUs can hit the
   bounded challenge-solver timeout and are not automatically retried with guesses.
 
-The current SSH dependency requires cryptography >=48.0.1; HA 2026.10 already pins
-a compatible version. Older HA releases are not supported. Do not force
-an upgrade of HA's cryptography dependency to install it. Setup forms use HA 2026.10's
+The SSH dependency accepts AsyncSSH 2.24.x and later 2.x releases so Home Assistant
+can manage its shared version. Newer already-installed versions are not downgraded.
+Older HA releases are not supported. Do not force upgrades of HA's dependencies to
+install it. See `SECURITY.md` for dependency guidance. Setup forms use HA 2026.10's
 Probatio API rather than an older Voluptuous-only implementation.
 
 The firmware's public challenge-verification parameters and a generated seed table
@@ -200,12 +201,12 @@ Automated tests do not establish physical camera rendering or Home Assistant UI
 behavior. See `ACCEPTANCE.md` for the live-installation validation checklist. A version
 number is not a certification of universal firmware or hardware compatibility.
 
-74 automated tests pass: 18 use real encrypted AsyncSSH exchanges over in-process
+76 automated tests pass: 18 use real encrypted AsyncSSH exchanges over in-process
 socket pairs (no network listener), four cover adaptive navigation with transport doubles,
 six cover catalog parsing, and 40 cover UI-flow,
 coordinator, entity ownership, cleanup and packaging with explicit HA API doubles.
-Six additional tests cover release privacy checks, repository metadata and reproducible
-source archives without filesystem owner metadata.
+Eight additional tests cover release privacy checks, icon metadata, repository metadata
+and reproducible source archives without filesystem owner metadata.
 Those doubles do not establish real HA entity-registry removal or UI behavior.
 
 Run tests in a separate Python 3.12+ environment, not inside a running HA process:

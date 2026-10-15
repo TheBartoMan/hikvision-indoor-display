@@ -7,7 +7,7 @@
 - Camera selection, display on/off and Home have been confirmed by an installation
   tester on the supported firmware profile; broader acceptance remains outstanding.
 - GitHub source publication, hosted validation and release creation are in progress.
-- Brands and default HACS catalog inclusion have not been approved.
+- Local brand assets are supplied; default HACS catalog inclusion is not yet approved.
 - Local unit tests are not a substitute for live acceptance or hosted validation.
 
 Do not claim publication, HACS approval or completed physical tests until those
@@ -50,17 +50,18 @@ This is a custom integration for **HACS**, not a Supervisor app for the Apps sto
 HACS requires a public GitHub repository. Once its metadata and validation are in
 place, users can add the repository URL as a custom **Integration** repository.
 
-Run the included HACS and hassfest GitHub Actions and resolve all findings. Add the
-integration icon through the Home Assistant brands contribution process using an
-asset with appropriate redistribution rights. Do not claim the brands check passes
-before it does. The hosted actions have not been executed during local preparation.
+Run the included HACS and hassfest GitHub Actions and resolve all findings. Original
+local icons are provided in `custom_components/hikvision_display/brand/` under the
+project license. Home Assistant supports these directly for custom integrations;
+an external brands repository submission is not needed for this package. Check the
+actual hosted result before claiming that validation passed.
 
 Complete and record `ACCEPTANCE.md`. Create a GitHub release tagged `v1.0.0` with
 the changelog and audited source archive. A tag by itself is not a GitHub release.
 Publish it as a stable, non-prerelease release only after acceptance is confirmed.
 
 For default HACS search/catalog inclusion, an owner or major contributor must submit
-a separate pull request to `hacs/default` after the validation and brands checks
+a separate pull request to `hacs/default` after the validation and local brands checks
 pass. A repository may be organisation-owned, but HACS asks that the editable
 submission PR come from a personal fork, not an organisation fork. Inclusion depends
 on HACS review and merge; publishing a GitHub release does not guarantee it.
