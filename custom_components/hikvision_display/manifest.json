@@ -1,0 +1,16 @@
+{
+  "domain": "hikvision_display",
+  "name": "Hikvision Indoor Display",
+  "codeowners": [
+    "@TheBartoMan"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/TheBartoMan/hikvision-indoor-display",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/TheBartoMan/hikvision-indoor-display/issues",
+  "requirements": [
+    "asyncssh==2.24.1"
+  ],
+  "version": "1.0.0"
+}
