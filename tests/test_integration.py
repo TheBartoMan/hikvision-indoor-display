@@ -479,7 +479,7 @@ class PackagingTests(unittest.TestCase):
     def test_manifest_translations_and_seed_integrity(self):
         manifest = json.loads((COMPONENT / "manifest.json").read_text())
         self.assertTrue(manifest["config_flow"])
-        self.assertEqual(manifest["requirements"], ["asyncssh==2.24.1"])
+        self.assertEqual(manifest["requirements"], ["asyncssh>=2.24.0,<3"])
         if "documentation" in manifest:
             self.assertTrue(manifest["documentation"].startswith("https://github.com/"))
             self.assertEqual(manifest["issue_tracker"], manifest["documentation"] + "/issues")

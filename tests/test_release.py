@@ -3,9 +3,11 @@ import ipaddress
 import json
 from pathlib import Path, PurePosixPath
 import shutil
+import struct
 import tempfile
 import unittest
 import zipfile
+import zlib
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -15,6 +17,21 @@ spec.loader.exec_module(release)
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_bundled_icons_have_expected_dimensions_and_no_metadata(self):
+        for path in (ROOT / release.MANIFEST.parent / "brand").glob("*.png"):
+            with self.subTest(icon=path.name):
+                release.check_brand_png(path.read_bytes(), 512 if "@2x" in path.name else 256)
+
+    def test_rejects_icon_metadata_wrong_dimensions_and_corruption(self):
+        data = (ROOT / release.MANIFEST.parent / "brand/icon.png").read_bytes()
+        payload = b"Comment\x00synthetic fixture"
+        kind = b"tEXt"
+        chunk = struct.pack(">I", len(payload)) + kind + payload + struct.pack(">I", zlib.crc32(kind + payload))
+        for candidate, size in [(data[:-12] + chunk + data[-12:], 256),
+                                (data, 512), (data[:29] + bytes([data[29] ^ 1]) + data[30:], 256)]:
+            with self.assertRaises(ValueError):
+                release.check_brand_png(candidate, size)
+
     def test_release_source_audit(self):
         files, manifest = release.check(ROOT)
         self.assertEqual(manifest["version"], "1.0.0")
