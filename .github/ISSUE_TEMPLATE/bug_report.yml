@@ -1,0 +1,35 @@
+name: Bug report
+description: Report a reproducible integration problem without private station data.
+body:
+  - type: markdown
+    attributes:
+      value: Do not include passwords, host keys, serial numbers, addresses, raw SSH output, QR challenges or raw station diagnostics.
+  - type: input
+    id: integration_version
+    attributes:
+      label: Integration version
+    validations:
+      required: true
+  - type: input
+    id: home_assistant_version
+    attributes:
+      label: Home Assistant Core version
+    validations:
+      required: true
+  - type: input
+    id: station_profile
+    attributes:
+      label: Station model, firmware version and display language
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps, expected result and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Sanitized integration diagnostics
+      description: Review the integration diagnostic export before sharing. Do not paste raw station diagnostics.
