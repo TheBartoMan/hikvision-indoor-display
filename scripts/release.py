@@ -6,8 +6,10 @@ import ipaddress
 import json
 from pathlib import Path
 import re
+import struct
 import sys
 import zipfile
+import zlib
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = Path("custom_components/hikvision_display/manifest.json")
@@ -57,6 +59,29 @@ def audit_text(text):
         raise ValueError("Private hostname")
 
 
+def check_brand_png(data, size):
+    if not data.startswith(b"\x89PNG\r\n\x1a\n"):
+        raise ValueError("Invalid brand PNG")
+    offset, chunks = 8, []
+    while offset < len(data):
+        if len(data) - offset < 12:
+            raise ValueError("Truncated brand PNG")
+        length = struct.unpack_from(">I", data, offset)[0]
+        kind = data[offset + 4:offset + 8]
+        payload = data[offset + 8:offset + 8 + length]
+        end = offset + length + 12
+        if end > len(data) or kind not in {b"IHDR", b"IDAT", b"IEND"}:
+            raise ValueError("Brand PNG contains unexpected data or metadata")
+        if zlib.crc32(kind + payload) != struct.unpack_from(">I", data, end - 4)[0]:
+            raise ValueError("Brand PNG checksum mismatch")
+        if kind == b"IHDR" and (length != 13 or struct.unpack(">IIBBBBB", payload) != (size, size, 8, 6, 0, 0, 0)):
+            raise ValueError("Brand PNG must be correctly sized RGBA")
+        chunks.append(kind)
+        offset = end
+    if not chunks or chunks[0] != b"IHDR" or chunks[-1] != b"IEND" or b"IDAT" not in chunks:
+        raise ValueError("Incomplete brand PNG")
+
+
 def check(root, require_metadata=False):
     files = release_files(root)
     if MANIFEST not in files:
@@ -68,6 +93,12 @@ def check(root, require_metadata=False):
             raise ValueError("Required runtime file missing: " + name)
     for relative in files:
         path = root / relative
+        if path.suffix == ".png":
+            if (relative.parent != MANIFEST.parent / "brand" or relative.name not in
+                    {"icon.png", "icon@2x.png", "dark_icon.png", "dark_icon@2x.png"}):
+                raise ValueError("Unexpected image asset")
+            check_brand_png(path.read_bytes(), 512 if "@2x" in relative.name else 256)
+            continue
         if path.suffix == ".bin":
             if str(relative) != "custom_components/hikvision_display/seeds.bin":
                 raise ValueError("Unexpected binary")
