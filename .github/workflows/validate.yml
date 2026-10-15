@@ -8,6 +8,9 @@ permissions:
 jobs:
   tests:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        asyncssh: ['2.24.0', '2.24.1']
     steps:
       - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a
         with:
@@ -15,7 +18,7 @@ jobs:
       - uses: actions/setup-python@ff73b2463e2f3baa703f830da214b8dfeeaeccf8
         with:
           python-version: '3.14'
-      - run: python -m pip install -r requirements-test.txt
+      - run: python -m pip install -r requirements-test.txt "asyncssh==${{ matrix.asyncssh }}"
       - run: python -B -m unittest discover -s tests -v
       - run: python scripts/release.py check --require-metadata
   hassfest:
